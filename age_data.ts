@@ -127,12 +127,30 @@ async function scrapeEventResults(page: Page): Promise<CompetitionResult[]> {
         
         const pageResults = await page.evaluate(() => {
             const rows = Array.from(document.querySelectorAll('table tbody tr'));
-            return rows.map(row => {
+            
+            interface TableResult {
+                meet: string;
+                date: string;
+                age: string;
+                lifter: string;
+                bodyWeight: number;
+                snatch1: number;
+                snatch2: number;
+                snatch3: number;
+                snatchBest: number;
+                cj1: number;
+                cj2: number;
+                cj3: number;
+                cjBest: number;
+                total: number;
+            }
+
+            return rows.map<TableResult>(row => {
                 const cells = Array.from(row.querySelectorAll('td'));
-                const getText = (cell: Element | undefined | null) => 
-                    cell?.textContent ? cell.textContent.trim() : '';
-                const getNumber = (cell: Element | undefined | null) => {
-                    const text = cell?.textContent ? cell.textContent.trim() : '0';
+                const getText = (cell: Element | undefined | null): string => 
+                    cell?.textContent?.trim() ?? '';
+                const getNumber = (cell: Element | undefined | null): number => {
+                    const text = cell?.textContent?.trim() ?? '0';
                     return parseFloat(text) || 0;
                 };
 
@@ -174,22 +192,45 @@ async function scrapeEventResults(page: Page): Promise<CompetitionResult[]> {
 function saveData(data: EventData[]) {
     const allResults = data.flatMap(event => event.results);
     
-    // Update CSV header to include meet and date
-    const csvHeader = 'meet,date,lifter,age,bodyWeight,snatch1,snatch2,snatch3,snatch,cj1,cj2,cj3,cj,total\n';
-    
-    // Update CSV row format to include meet and date
-    const csvRows = allResults
-        .map(result => 
-            `"${result.meet}","${result.date}","${result.lifter}","${result.age}",${result.bodyWeight},` +
-            `${result.snatch1},${result.snatch2},${result.snatch3},${result.snatchBest},` +
-            `${result.cj1},${result.cj2},${result.cj3},${result.cjBest},${result.total}`
-        )
-        .join('\n');
-    
-    const csvContent = csvHeader + csvRows;
+    // Create TypeScript interface and const declaration
+    const tsContent = `interface LiftingResult {
+    meet: string;
+    date: string;
+    lifter: string;
+    age: string;
+    bodyWeight: number;
+    snatch1: number;
+    snatch2: number;
+    snatch3: number;
+    snatch: number;
+    cj1: number;
+    cj2: number;
+    cj3: number;
+    cj: number;
+    total: number;
+}
 
-    fs.writeFileSync('2020_to_3_3_age_data.csv', csvContent);
-    console.log(`Successfully saved ${allResults.length} total results to CSV`);
+export const liftingResults: LiftingResult[] = [
+    ${allResults.map(result => `{
+        meet: "${result.meet}",
+        date: "${result.date}",
+        lifter: "${result.lifter}",
+        age: "${result.age}",
+        bodyWeight: ${result.bodyWeight},
+        snatch1: ${result.snatch1},
+        snatch2: ${result.snatch2},
+        snatch3: ${result.snatch3},
+        snatch: ${result.snatchBest},
+        cj1: ${result.cj1},
+        cj2: ${result.cj2},
+        cj3: ${result.cj3},
+        cj: ${result.cjBest},
+        total: ${result.total}
+    }`).join(',\n    ')}
+];`;
+
+    fs.writeFileSync('2020_to_3_3_age_data.ts', tsContent);
+    console.log(`Successfully saved ${allResults.length} total results to TypeScript file`);
 }
 
 if (require.main === module) {
