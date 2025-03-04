@@ -41,8 +41,8 @@ async function scrapeWeightliftingData() {
     const allEvents: EventData[] = [];
     
     try {
-        const START_ID = 6773;
-        const END_ID = 4312;
+        const START_ID = 6178;
+        const END_ID = 5652;
         
         for (let eventId = START_ID; eventId >= END_ID; eventId--) {
             try {
@@ -229,7 +229,7 @@ export const liftingResults: LiftingResult[] = [
     }`).join(',\n    ')}
 ];`;
 
-    fs.writeFileSync('2020_to_3_3_age_data.ts', tsContent);
+    fs.writeFileSync('data/2023.ts', tsContent);
     console.log(`Successfully saved ${allResults.length} total results to TypeScript file`);
 }
 
