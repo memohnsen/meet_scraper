@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "ts-node weightlifting_scraper.ts"
+    "start": "ts-node age_data.ts"
   },
   "name": "cursor_meet_scraper",
   "version": "1.0.0",

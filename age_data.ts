@@ -18,11 +18,11 @@ interface CompetitionResult {
     snatch1: number;
     snatch2: number;
     snatch3: number;
-    snatchBest: number;  // Best snatch
+    snatch: number;
     cj1: number;
     cj2: number;
     cj3: number;
-    cjBest: number;      // Best C&J
+    cj: number;
     total: number;
 }
 
@@ -41,8 +41,8 @@ async function scrapeWeightliftingData() {
     const allEvents: EventData[] = [];
     
     try {
-        const START_ID = 4671;
-        const END_ID = 4312;
+        const START_ID = 6780;
+        const END_ID = 6774;
         
         for (let eventId = START_ID; eventId >= END_ID; eventId--) {
             try {
@@ -137,11 +137,11 @@ async function scrapeEventResults(page: Page): Promise<CompetitionResult[]> {
                 snatch1: number;
                 snatch2: number;
                 snatch3: number;
-                snatchBest: number;
+                snatch: number;
                 cj1: number;
                 cj2: number;
                 cj3: number;
-                cjBest: number;
+                cj: number;
                 total: number;
             }
 
@@ -163,11 +163,11 @@ async function scrapeEventResults(page: Page): Promise<CompetitionResult[]> {
                     snatch1: getNumber(cells[5]),
                     snatch2: getNumber(cells[6]),
                     snatch3: getNumber(cells[7]),
-                    snatchBest: getNumber(cells[11]),
+                    snatch: getNumber(cells[11]),
                     cj1: getNumber(cells[8]),
                     cj2: getNumber(cells[9]),
                     cj3: getNumber(cells[10]),
-                    cjBest: getNumber(cells[12]),
+                    cj: getNumber(cells[12]),
                     total: getNumber(cells[13])
                 };
             });
@@ -211,25 +211,10 @@ function saveData(data: EventData[]) {
 }
 
 export const liftingResults: LiftingResult[] = [
-    ${allResults.map(result => `{
-        meet: "${result.meet}",
-        date: "${result.date}",
-        lifter: "${result.lifter}",
-        age: "${result.age}",
-        bodyWeight: ${result.bodyWeight},
-        snatch1: ${result.snatch1},
-        snatch2: ${result.snatch2},
-        snatch3: ${result.snatch3},
-        snatch: ${result.snatchBest},
-        cj1: ${result.cj1},
-        cj2: ${result.cj2},
-        cj3: ${result.cj3},
-        cj: ${result.cjBest},
-        total: ${result.total}
-    }`).join(',\n    ')}
+    ${allResults.map(result => `{ meet: "${result.meet}", date: "${result.date}", lifter: "${result.lifter}", age: "${result.age}", bodyWeight: ${result.bodyWeight}, snatch1: ${result.snatch1}, snatch2: ${result.snatch2}, snatch3: ${result.snatch3}, snatch: ${result.snatch}, cj1: ${result.cj1}, cj2: ${result.cj2}, cj3: ${result.cj3}, cj: ${result.cj}, total: ${result.total}}`).join(',\n    ')}
 ];`;
 
-    fs.writeFileSync('data/2020.ts', tsContent);
+    fs.writeFileSync('data/new.ts', tsContent);
     console.log(`Successfully saved ${allResults.length} total results to TypeScript file`);
 }
 

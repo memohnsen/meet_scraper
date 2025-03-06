@@ -1,10 +1,10 @@
 - 2025
-    - current: 6773
-    - start: 6686
+    - current: 6780 (PULL)
+    - end: 6774
 
 - 2024
-    - start: 6179
-    - end: 6685
+    - start: 6685
+    - end: 6179
 
 - 2023
     - start: 6178
