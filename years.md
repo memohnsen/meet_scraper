@@ -1,5 +1,5 @@
 - 2025
-    - current: 6780 (PULL)
+    - current: 6780
     - end: 6774
 
 - 2024
