@@ -42,8 +42,8 @@ async function scrapeWeightliftingData() {
     const allEvents: EventData[] = [];
     
     try {
-        const START_ID = 6836;
-        const END_ID = 6818;
+        const START_ID = 6850;
+        const END_ID = 6837;
         
         for (let eventId = START_ID; eventId >= END_ID; eventId--) {
             try {
@@ -221,7 +221,7 @@ function formatDate(dateStr: string): string {
 
 function saveDataAsCSV(data: EventData[]) {
     // Create a counter for generating unique numeric IDs
-    let idCounter = 312270;
+    let idCounter = 312965;
     
     // Add a unique numeric ID to each result
     const allResults = data.flatMap(event => 
